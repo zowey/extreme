@@ -869,15 +869,33 @@ public class JointsUpdate : MonoBehaviour {
 			8 Right Elbow -> Right Hand
 
 		*/
+
 		boneDirection[0] = jointsModel[JointType.Spine].position - jointsModel[JointType.HipCenter].position; 
-		boneDirection[1] = jointsModel[JointType.ShoulderCenter].position - jointsModel[JointType.Spine].position; 
-		boneDirection[2] = jointsModel[JointType.Head].position - jointsModel[JointType.ShoulderCenter].position; 
-		boneDirection[3] = jointsModel[JointType.ShoulderLeft].position - jointsModel[JointType.ShoulderCenter].position; 
-		boneDirection[4] = jointsModel[JointType.ShoulderRight].position - jointsModel[JointType.ShoulderCenter].position; 
+		boneDirection[0] = jointsModel[JointType.HipCenter].InverseTransformDirection(boneDirection[0]);
+
+		boneDirection[1] = jointsModel[JointType.ShoulderCenter].position - jointsModel[JointType.Spine].position;
+		boneDirection[1] = jointsModel[JointType.Spine].InverseTransformDirection(boneDirection[1]); 
+
+		boneDirection[2] = jointsModel[JointType.ShoulderLeft].position - jointsModel[JointType.ShoulderCenter].position; 
+		boneDirection[2] = jointsModel[JointType.ShoulderCenter].InverseTransformDirection(boneDirection[2]);
+
+		boneDirection[3] = jointsModel[JointType.ShoulderRight].position - jointsModel[JointType.ShoulderCenter].position; 
+		boneDirection[3] = jointsModel[JointType.ShoulderCenter].InverseTransformDirection(boneDirection[3]);
+
+		boneDirection[4] = jointsModel[JointType.Head].position - jointsModel[JointType.ShoulderCenter].position; 
+		boneDirection[4] = jointsModel[JointType.ShoulderCenter].InverseTransformDirection(boneDirection[4]);
+
 		boneDirection[5] = jointsModel[JointType.ElbowLeft].position - jointsModel[JointType.ShoulderLeft].position; 
-		boneDirection[6] = jointsModel[JointType.ElbowRight].position - jointsModel[JointType.ShoulderRight].position; 
+		boneDirection[5] = jointsModel[JointType.ShoulderLeft].InverseTransformDirection(boneDirection[5]);
+
+		boneDirection[6] = jointsModel[JointType.ElbowRight].position - jointsModel[JointType.ShoulderRight].position;
+		boneDirection[6] = jointsModel[JointType.ShoulderRight].InverseTransformDirection(boneDirection[6]); 
+
 		boneDirection[7] = jointsModel[JointType.HandLeft].position - jointsModel[JointType.ElbowLeft].position; 
+		boneDirection[7] = jointsModel[JointType.ElbowLeft].InverseTransformDirection(boneDirection[7]);
+
 		boneDirection[8] = jointsModel[JointType.HandRight].position - jointsModel[JointType.ElbowRight].position; 
+		boneDirection[8] = jointsModel[JointType.ElbowRight].InverseTransformDirection(boneDirection[8]);
 
 		/*
 		for (int i=0; i<10; ++i)
@@ -992,7 +1010,7 @@ public class JointsUpdate : MonoBehaviour {
 				target = jointPosition(JointType.ShoulderCenter) - jointPosition(JointType.Spine);
 				direction = boneDirection[1];
 
-				RotateJointWithAngle (target, direction, type);
+				RotateJointWithAngle(target, direction, type);
 
 			break;
 
@@ -1001,17 +1019,18 @@ public class JointsUpdate : MonoBehaviour {
 				// Three cases, this bone defines rotation of three bones
 				// target = new direction (towards new location), direction = first vector orientation
 
+/*
 				target = jointPosition(JointType.ShoulderLeft) - jointPosition(JointType.ShoulderCenter);
 				direction = boneDirection[2];
-				RotateJointWithAngle (target, direction, type);
+				RotateJointWithAngle(target, direction, type);
 
 				target = jointPosition(JointType.ShoulderRight) - jointPosition(JointType.ShoulderCenter);
 				direction = boneDirection[3];
-				RotateJointWithAngle (target, direction, type);
-
+				RotateJointWithAngle(target, direction, type);
+*/
 				target = jointPosition(JointType.Head) - jointPosition(JointType.ShoulderCenter);
 				direction = boneDirection[4];
-				RotateJointWithAngle (target, direction, type);
+				RotateJointWithAngle(target, direction, type);
 
 			break;
 
@@ -1019,11 +1038,11 @@ public class JointsUpdate : MonoBehaviour {
 
 				if (transmissionOnHead) 
 				{
-					target = jointPosition(JointType.ShoulderCenter) - jointPosition(JointType.Head);
+					target = jointPosition(JointType.Head) - jointPosition(JointType.ShoulderCenter);
 					target.x = target.x*3; // boost rotation a bit
-					direction = boneDirection[jointIndex-1];
+					direction = boneDirection[4];
 
-					RotateJointWithAngle (target, direction, type);
+					RotateJointWithAngle(target, direction, type);
 				}
 
 			break;
@@ -1033,7 +1052,7 @@ public class JointsUpdate : MonoBehaviour {
 				target = jointPosition(JointType.ElbowLeft) - jointPosition(JointType.ShoulderLeft);
 				direction = boneDirection[5];
 
-				RotateJointWithAngle (target, direction, type);
+				RotateJointWithAngle(target, direction, type);
 
 			break;
 
@@ -1042,7 +1061,7 @@ public class JointsUpdate : MonoBehaviour {
 				target = jointPosition(JointType.ElbowRight) - jointPosition(JointType.ShoulderRight);
 				direction = boneDirection[6];
 
-				RotateJointWithAngle (target, direction, type);
+				RotateJointWithAngle(target, direction, type);
 
 			break;
 
@@ -1051,7 +1070,7 @@ public class JointsUpdate : MonoBehaviour {
 				target = jointPosition(JointType.HandLeft) - jointPosition(JointType.ElbowLeft);
 				direction = boneDirection[7];
 
-				RotateJointWithAngle (target, direction, type);
+				RotateJointWithAngle(target, direction, type);
 
 			break;
 
@@ -1060,7 +1079,7 @@ public class JointsUpdate : MonoBehaviour {
 				target = jointPosition(JointType.HandRight) - jointPosition(JointType.ElbowRight);
 				direction = boneDirection[8];
 
-				RotateJointWithAngle (target, direction, type);
+				RotateJointWithAngle(target, direction, type);
 
 			break;
 
